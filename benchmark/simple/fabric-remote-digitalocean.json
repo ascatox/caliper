@@ -1,0 +1,82 @@
+{
+  "fabric": {
+    "cryptodir": "network/fabric/digitalocean/crypto-config",
+    "network": {
+      "orderer": {
+        "url": "grpc://167.99.89.178:7050",
+        "mspid": "OrdererMSP",
+        "msp": "network/fabric/digitalocean/crypto-config/ordererOrganizations/example.com/msp/",
+        "server-hostname": "orderer.example.com"
+      },
+      "org1": {
+        "name": "Org1",
+        "mspid": "Org1MSP",
+        "msp": "network/fabric/digitalocean/crypto-config/peerOrganizations/org1.example.com/msp/",
+        "ca": {
+          "url": "http://167.99.89.178:7054",
+          "name": "ca.example.com"
+        },
+        "peer1": {
+          "requests": "grpc://167.99.89.178:7051",
+          "events": "grpc://167.99.89.178:7053",
+          "server-hostname": "peer0.org1.example.com"
+        },
+        "peer2": {
+          "requests": "grpc://167.99.89.178:8051",
+          "events": "grpc://167.99.89.178:8053",
+          "server-hostname": "peer1.org1.example.com"
+        },
+        "peer3": {
+          "requests": "grpc://167.99.89.178:9051",
+          "events": "grpc://167.99.89.178:9053",
+          "server-hostname": "peer2.org1.example.com"
+        },
+        "peer4": {
+          "requests": "grpc://167.99.89.178:10051",
+          "events": "grpc://167.99.89.178:10053",
+          "server-hostname": "peer3.org1.example.com"
+        }
+      }
+    },
+    "channel": [{
+      "name": "ledgerchannel",
+      "deployed": true,
+      "config": "network/fabric/digitalocean/channel-artifacts/channel.tx",
+      "organizations": ["org1"]
+    }],
+    "chaincodes": [{
+      "id": "productunithub",
+      "path": "product-unit-hub-chaincode",
+      "language": "NODE",
+      "version": "v3.3",
+      "channel": "ledgerchannel",
+      "isAlreadyInstalled": true,
+      "isAlreadyInstantiated": true
+    }],
+    "endorsement-policy": {
+      "identities": [{
+        "role": {
+          "name": "admin",
+          "mspId": "Org1MSP"
+        }
+      }],
+      "policy": {
+        "2-of": [{
+          "signed-by": 0
+        }, {
+          "signed-by": 1
+        }]
+      }
+    },
+    "context": {
+      "open": "ledgerchannel",
+      "query": "ledgerchannel"
+    },
+    "info": {
+      "Version": "1.1.0",
+      "Size": "4 Peers",
+      "Orderer": "Solo",
+      "Distribution": "Single Host"
+    }
+  }
+}

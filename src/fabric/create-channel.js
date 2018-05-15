@@ -54,8 +54,11 @@ function run(config_path) {
         const t = global.tapeObj;
         let ORGS = fabric.network;
         let caRootsPath = ORGS.orderer.tls_cacerts;
-        let data = fs.readFileSync(path.join(__dirname, '../..', caRootsPath));
-        let caroots = Buffer.from(data).toString();
+        let caroots = null;
+        if(caRootsPath) {
+          let data = fs.readFileSync(path.join(__dirname, '../..', caRootsPath));
+          caroots = Buffer.from(data).toString();
+        }
         utils.setConfigSetting('key-value-store', 'fabric-client/lib/impl/FileKeyValueStore.js');
 
         return channels.reduce((prev, channel)=>{

@@ -49,7 +49,8 @@ module.exports.run = function (config_path) {
                     throw new Error('could not find channel in config');
                 }
                 for(let v in channel.organizations) {
-                    promises.push(e2eUtils.installChaincode(channel.organizations[v], chaincode));
+                    if(!chaincode.isAlreadyInstalled)
+                      promises.push(e2eUtils.installChaincode(channel.organizations[v], chaincode));
                 }
 
                 return Promise.all(promises).then(() => {

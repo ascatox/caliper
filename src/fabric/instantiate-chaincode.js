@@ -46,11 +46,13 @@ module.exports.run = function (config_path) {
         t.comment('Instantiate chaincode......');
         chaincodes.reduce(function(prev, chaincode){
             return prev.then(() => {
-                return e2eUtils.instantiateChaincode(chaincode, policy, false).then(() => {
-                    t.pass('Instantiated chaincode ' + chaincode.id + ' successfully ');
-                    t.comment('Sleep 5s...');
-                    return commUtils.sleep(5000);
-                });
+                if(chaincode.isAlreadyInstantiated) return resolve();
+                else
+                    return e2eUtils.instantiateChaincode(chaincode, policy, false).then(() => {
+                        t.pass('Instantiated chaincode ' + chaincode.id + ' successfully ');
+                        t.comment('Sleep 5s...');
+                        return commUtils.sleep(5000);
+                    });
             });
         }, Promise.resolve())
             .then(() => {
